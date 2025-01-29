@@ -37,12 +37,23 @@ Insilico Medicine’s application of **deep generative networks** to drug discov
 ---
 
 ## Data Overview
+To achieve this, Insilico Medicine first leveraged large amounts of compiled datasets and a variety of data types and attributes. Insilico Medicine tapped into an open-sourced chemical dataset (“ZINC”) by John J. Irwin and Brian K. Shoichet. With over 35 million compounds available, the ZINC dataset was formed through data aggregation from 10 vendor catalogs of molecular data stored as a 2D Structured Data File (SDF). 
+
+The authors transformed the 2D SDF data to nominal string data with the internationally-recognized SMILES representations. SMILES transforms the input 2D molecule design and describes its chemical and structural properties in ASCII strings. For example, Aspirin’s structure can be represented as the following using SMILES (Figure 1). 
+
+Data quality was checked and cleaned. Checking for data completeness and consistency, data instances with missing values, inconsistently formatted data, and duplicates were removed. 
+
+To ensure the dataset is valid for drug discovery, additional attributes were created, namely: molecular weight, # Hydrogen-Bond donors, # of Hydrogen Bond Acceptors, # of rotatable bonds, XLogP.
+
+Based on commonly understood properties of compounds, a criteria was set to filter instances that are considered “biologically relevant” (Table 1 and FIgure 2). Ultimately, a subset of training data called “MOSES” was developed, consisting of 1,936,962 molecules in total. 
 
 ### ZINC Dataset
 - **Source**: Open-sourced chemical dataset curated by John J. Irwin and Brian K. Shoichet.
 - **Size**: Over **35 million compounds** aggregated from 10 vendor catalogs.
-- **Format**: Originally stored as **2D Structured Data Files (SDF)**, converted to **SMILES representations** (ASCII strings describing chemical structures).  
+- **Format**: Originally stored as **2D Structured Data Files (SDF)**, converted to **SMILES representations** (ASCII strings describing chemical structures).
+
   **Example**: Aspirin’s SMILES string: `O=C(C)Oc1ccccc1C(=O)O`  
+  ![Fig1](./insilico/fig1.gif)
   **Figure 1**: SMILES Representation of Aspirin.
 
 ### Data Cleaning & Validation
@@ -68,26 +79,39 @@ Insilico Medicine’s application of **deep generative networks** to drug discov
 | Excluded Features         | Charged atoms, atomic cycles >8    |
 **Table 1**: Instance selection criteria for the MOSES dataset.  
 
-
+![Fig2](./insilico/fig2.jpg)
 **Figure 2**: MOSES dataset processed from ZINC.
 
+
+
 ### Dataset Partitioning
+Afterwards, Insilico Medicine partitioned the dataset into three sets of subsets, namely: Training (around >80% for training with 1.6M instances), Test (<10% with 176K instances), and Test with New Scaffolds (<10%  with 176k instances). The Training set will be dedicated to train the AI model, the test will be used to evaluate the performance of the trained model, and the “Test with new scaffolds” will be used to assess how the model responds to molecules that have not been seen before (Figure 3). 
+
+
 - **Training**: >80% (~1.6M molecules)
 - **Test**: <10% (~176K molecules)
-- **Test with New Scaffolds**: <10% (~176K molecules)  
+- **Test with New Scaffolds**: <10% (~176K molecules) 
 
+![Fig3](./insilico/fig3.png)
 **Figure 3**: Example of training data distribution.
 
 ---
 
 ## How Data is Leveraged
+Based on the MOSES dataset, Insilico Medicine utilized “Adversarial Autoencoders” (AAE) to train various generative chemistry models that can generate “virtual” molecules (Figure 4). Insilico Medicine trained an adaptation of the Adversarial Autoencoders (AAE) that generates a SMILES string representation as output . 
 
 ### Adversarial Autoencoders (AAE)
-Insilico Medicine’s **GENTRL model** (Generative Tensorial Reinforcement Learning) uses a three-part AAE architecture:
+The AAE consists of three main portions: an encoder, latent space, and generator. The encoder is a recurrent neural network that captures the statistical variances in the ~1.6M training instances of molecules in the MOSES dataset, and outputs a vector of 50 dimensions called the “Latent Space”, which captures the molecule variations within the MOSES training set. 
+
+During training, Insilico Medicine used a prepared dataset and trained the AAE model to output the same SMILES molecule back. To optimize the model, three rewards functions were calculated: the trending SOM, General Kinases SOM, and the Specific Kinase SOM. Using principles of backpropagation and the Adam optimizer, the model was trained with a learning rate of 0.0001 and optimized for 300K updates. 
+
+For inference, Insilico Medicine then used the “Latent Space” and “generator” portions of the model to recreate virtual organic molecules. With this, Insilico Medicine generated over 30,000 different molecules. The results were then binned based on chemical properties to ultimately be reduced down to 40 proposing drug molecules. 
+
 1. **Encoder**: Recurrent neural network capturing statistical variances in training data.
 2. **Latent Space**: 50-dimensional vector encoding molecule variations.
 3. **Generator**: Produces novel SMILES strings representing molecules.
 
+![Fig4](./insilico/fig4.png)
 **Figure 4**: Architecture of Insilico Medicine’s GENTRL model.
 
 ### Training Process
@@ -107,17 +131,17 @@ Insilico Medicine’s **GENTRL model** (Generative Tensorial Reinforcement Learn
 ## Challenges
 
 1. **Limited Data on Approved Drugs**:  
-   AI models excel at generating compounds but struggle to predict FDA approval likelihood due to sparse data on successful drugs.
+Whilst transformative, there are still foreseeable challenges with using AI/ML in drug development. The most notable one is, despite there being a large amount of data for general molecules, the data size for approved drug compounds is limited. As a result, the existing AI model only performs well in generative chemical compounds, but may not be optimized to predict which chemical compounds are most likely to succeed and be approved by the FDA. This is still an on-going area of research Insilico Medicine is working on.
 
 2. **Social & Cultural Barriers**:  
-   - Opacity in AI-driven drug design complicates explanations to patients/doctors.  
-   - Patient acceptance of AI-developed drugs remains untested.
+Furthermore, the concept of developing drugs in-silico is still a novel topic and the adoption of drugs developed by Insilico Medicine may have to overcome social and cultural barriers. As the drug development process was done by a neural network, rather than researchers, there is less opacity in how the drug was developed and may be hard for doctors to explain to their patients about how this drug was formed. There is also little understanding on how patients will feel if they are taking a drug that was developed by AI. 
+
 
 ---
 
 ## Conclusion
 
-Insilico Medicine pioneers **AI-driven drug discovery**, demonstrating unprecedented cost and time savings. While challenges persist, their work signals a transformative shift in biotechnology.
+Overall, Insilico Medicine has pioneered an innovative method to apply big data and is set to transform the world through its AI application in drug discovery. 
 
 ---
 
