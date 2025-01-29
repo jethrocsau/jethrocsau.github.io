@@ -156,7 +156,7 @@ awards:
 
 ## About Me
 
-Hey there! My name is Jethro and I'm a data-scientist and venture builder with a passion for develop interventions and prediction systems that combat drug-resistant pathogens and improve prediction of therapeutic resistant cell mutations. 
+Hey there! I'm a data-scientist and venture builder for interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
 
 Some projects I've worked on include: researching intervention methods tackling MDRO pathogens, de-novo peptide design for HIV using AlphaFold, infection surveillance mechanisms using IoT sensors and digital twins, and more.
 
