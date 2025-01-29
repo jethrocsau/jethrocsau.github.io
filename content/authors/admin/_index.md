@@ -153,13 +153,12 @@ awards:
     summary: |
       Object-oriented programming (OOP) lets you specify relationships between functions and the objects that they can act on, helping you manage complexity in your code. This is an intermediate level course, providing an introduction to OOP, using the S3 and R6 systems. S3 is a great day-to-day R programming tool that simplifies some of the functions that you write. R6 is especially useful for industry-specific analyses, working with web APIs, and building GUIs.
 ---
-
 ## About Me
 
 Hey there! I'm a data-scientist and venture builder for interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
 
 Some projects I've worked on include: researching intervention methods tackling MDRO pathogens, de-novo peptide design for HIV using AlphaFold, infection surveillance mechanisms using IoT sensors and digital twins, and more.
 
-During my free time, you would find me DJing and exploring music creation (or you may call it lazy audio-signal processing).
+You may also find me mixing music sometimes, or I'd like to refer as - "manual" audio-signal processing.
 
 Please reach out to collaborate 😃
