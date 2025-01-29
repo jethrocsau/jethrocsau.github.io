@@ -13,6 +13,8 @@ AlbumGen is a multi-modal model that generates corresponding music from image al
 <img width="764" alt="image" src="https://github.com/user-attachments/assets/012f71c7-fa00-4ca7-809f-34b8607b4c72" />
 
 
-Uploading Demo_Albumgen.mp4…
+https://github.com/user-attachments/assets/43c1b02c-495e-46ff-b63e-791a9f0dc464
+
+
 
 <!--more-->
