@@ -44,7 +44,7 @@ interests:
   - Multi-modal Agents
 
 education:
-  - area: MS in Big Data Technology (GPA 4.0/4.3)
+  - area: MS in Big Data Technology 
     institution: Hong Kong University of Science and Technology 
     date_start: 2023-09-01
     date_end: 2025-05-31
