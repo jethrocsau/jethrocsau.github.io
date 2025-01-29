@@ -3,11 +3,16 @@ title: Pandas
 date: 2023-10-26
 external_link: https://github.com/pandas-dev/pandas
 tags:
-  - Hugo
-  - Wowchemy
-  - Markdown
+  - Multi-Modality
+  - AlbumGen
+  - LLM
 ---
 
-Flexible and powerful data analysis / manipulation library for Python, providing labeled data structures.
+AlbumGen is a multi-modal model that generates corresponding music from image albums by capturing cultural, musical, and acoustic qualities through textual intermediaries.
+
+<img width="764" alt="image" src="https://github.com/user-attachments/assets/012f71c7-fa00-4ca7-809f-34b8607b4c72" />
+
+
+Uploading Demo_Albumgen.mp4…
 
 <!--more-->
