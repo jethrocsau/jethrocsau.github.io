@@ -71,4 +71,6 @@ projects:
 slides: AlbumGen_Presentation
 ---
 
-Full Text of [paper here](/publication/AlbumGen/paper).
+Full Text of [paper here](./paper.pdf).
+
+Presentation of [AlbumGen with Demo here](./AlbumGen_Presentation.pdf).
