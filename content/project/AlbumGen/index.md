@@ -1,7 +1,7 @@
 ---
-title: Pandas
+title: AlbumGen. Image-to-Music Generation with Textual Intermediaries
 date: 2023-10-26
-external_link: https://github.com/pandas-dev/pandas
+external_link: [https://github.com/pandas-dev/pandas](https://github.com/jethrocsau/AlbumGen-Multi-modality-LLM)
 tags:
   - Multi-Modality
   - AlbumGen
