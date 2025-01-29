@@ -35,7 +35,7 @@ sections:
       title: '📚 My Research'
       subtitle: ''
       text: |-
-        I'm a data scientist with a passion for researching  AI/ML driven interventions against drug and therapeutic resistant pathogens and cancer cells. 
+       AI/ML driven interventions against drug and therapeutic resistant pathogens and cancer cells. 
 
         Along with my obsession with AI, I also spend my time building ventures for healthcare companies such as building medical devices using cationic polymers effective against MDROs, drug-discovery with generative AI, and infection surveillance systems!
         
