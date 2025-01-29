@@ -1,12 +1,12 @@
 ---
 # Display name
-title: 区卓修
+title: Jethro Au
 
 # Name pronunciation (optional)
-name_pronunciation: Jethro (Cheuk Sau) Au
+name_pronunciation: 
 
 # Full name (for SEO)
-first_name: Cheuk Sau
+first_name: Jethro Cheuk Sau
 last_name: Au
 
 # Status emoji
@@ -20,7 +20,7 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: ML/AI for Health / Venture Builder
+role: AI for Health / Venture Builder
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
