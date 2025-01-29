@@ -1,5 +1,5 @@
 ---
-title: AlbumGen. Image-to-Music Generation with Textual Intermediaries
+title: AlbumGen. Judging Music by its Cover
 date: 2023-10-26
 external_link: https://github.com/jethrocsau/AlbumGen-Multi-modality-LLM
 tags:

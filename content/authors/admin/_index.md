@@ -44,14 +44,14 @@ interests:
   - Multi-modal Agents
 
 education:
-  - area: MS in Big Data Technology
-    institution: Hong Kong University of Science and Technology
+  - area: MS in Big Data Technology (GPA 4.0/4.3)
+    institution: Hong Kong University of Science and Technology 
     date_start: 2023-09-01
     date_end: 2025-05-31
     summary: |
       GPA: 3.86/4.0
   - area: BS Industrial Engineering
-    institution: Northwestern
+    institution: Northwestern University
     date_start: 2014-09-01
     date_end: 2018-05-31
     summary: |
@@ -127,7 +127,7 @@ languages:
 #   Only `title`, `awarder`, and `date` are required.
 #   Begin multi-line `summary` with YAML's `|` or `|2-` multi-line prefix and indent 2 spaces below.
 awards:
-  - title: Neural Networks and Deep Learning
+  - title: TPG Fellowship
     url: https://www.coursera.org/learn/neural-networks-deep-learning
     date: '2023-11-25'
     awarder: Coursera
