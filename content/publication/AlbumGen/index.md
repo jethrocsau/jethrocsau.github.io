@@ -1,5 +1,5 @@
 ---
-title: 'AlbumGen'
+title: 'AlbumGen: Image-to-Music Generation with Textual Intermediaries'
 
 # Authors
 # If you created a profile for a user (e.g. the default `admin` user), write the username (folder name) here
@@ -46,7 +46,7 @@ url_poster: ''
 url_project: ''
 url_slides: ''
 url_source: 
-url_video: ''
+url_video: 'https://github.com/user-attachments/assets/43c1b02c-495e-46ff-b63e-791a9f0dc464'
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -108,4 +108,3 @@ AlbumGen explores generating music from album cover art using a multi-step pipel
 <img width="764" alt="image" src="https://github.com/user-attachments/assets/012f71c7-fa00-4ca7-809f-34b8607b4c72" />
 
 
-https://github.com/user-attachments/assets/43c1b02c-495e-46ff-b63e-791a9f0dc464
