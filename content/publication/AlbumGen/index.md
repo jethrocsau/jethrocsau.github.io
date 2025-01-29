@@ -69,5 +69,6 @@ projects:
 #   E.g. `slides: "example"` references `content/slides/example/index.md`.
 #   Otherwise, set `slides: ""`.
 slides: content/slides/AlbumGen_Presentation.pdf
+---
 
 Full Text of [paper here](/publication/AlbumGen/paper.pdf).
