@@ -10,6 +10,8 @@ tags:
   - Literature Review
 image:
   caption: 'Cyclic Peptide generation architecture - Kosugi et. al.'
+# Display this page in the Featured widget?
+featured: true
 ---
 
 This is Part 2 of my literature review notes on AlphaFold2 for Cyclic Peptide Design. Refer to the 1st part in my blog if you haven't checked that one out yet!

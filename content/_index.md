@@ -50,6 +50,7 @@ sections:
         folders:
           - publication
           - project
+          - post
         featured_only: true
     design:
       view: article-grid
