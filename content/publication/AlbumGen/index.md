@@ -1,5 +1,5 @@
 ---
-title: 'AlbumGen: Image-to-Music Generation with Textual Intermediaries'
+title: 'AlbumGen: An exploration into Multimodality with LLMs'
 
 # Authors
 # If you created a profile for a user (e.g. the default `admin` user), write the username (folder name) here
