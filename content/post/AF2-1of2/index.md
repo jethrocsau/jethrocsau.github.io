@@ -1,5 +1,5 @@
 ---
-title: AlphaFold2 for Cyclic Peptide Design - A Literature Review (1/2)
+title: AlphaFold2 for Cyclic Peptide Design - A Deep-dive into Generative Drug Design (1/2)
 summary: Literature Review on the AF2 architecture and its use for cyclic peptide design
 date: "2024-01-31"
 authors:
@@ -12,7 +12,7 @@ image:
   caption: 'Cyclic Peptide generation architecture (Kosugi et. al.)'
 ---
 
-As part of my learning journey on the use of AI for drug-discovery, I've documented my literature review of AlphaFold2 architecture, a review of its open-source implementation, and notes on how cyclic peptides can be designed by other researchers.
+As part of my learning journey on the use of AI for drug-discovery, I've documented my research notes, findings, and explorations into AlphaFold2 architecture and its use for de-novo cyclic peptide design. In this two-part series, I will first conduct a literature review and deep-dive into the AlphaFold2 model, and in part (2), I will explore recreating literature results and some exploratory hyperparameter searching.
 
 
 # Introduction
