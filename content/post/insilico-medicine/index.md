@@ -24,6 +24,8 @@ Welcome 👋
 
 # Insilico Medicine: Applying AI to Reduce Costs in Drug Discovery
 
+In this blog, I'm sharing my research notes on Insilico Medicine and their use of the AAE architecture for drug-dicovery and molecule generation. Enjoy!
+
 ## Introduction
 
 Conventional drug development has always been an uphill struggle. The American Society of Biochemistry and Molecular Biology reports that it **“takes 10 to 15 years and around US$1 billion to develop a successful drug”**, but despite these large investments in time and money, **“90% of drug candidates in clinical trials fail”**.
