@@ -1,5 +1,5 @@
 ---
-title: AlphaFold2 for Cyclic Peptide Design - A Literature Review (2/2)
+title: AlphaFold2 for Cyclic Peptide Design - A Deep-dive into Generative Drug Design (2/2)
 summary: Literature Review on the AF2 architecture and its use for cyclic peptide design
 date: 2024-05-25
 authors:
@@ -58,5 +58,46 @@ The same evaluation metric was used as the method performed above with 1YCR to s
 
 Fig 9: results of the generated and shortlisted 8 PDB structures
 
+**Hyperparameter tuning with HIV gp120 and HPC:**
+
+As the next step, I explored into a hyperparameter search in the process of generating HIV gp120 (6X9V) peptides and peptides for the Hepatitis C glycoproteins (7T6X). To explore which hyperparameters influence the results of the generated compound, a hyperparameter search of varying, optimizer and GD_Method was performed. In the first run, the gp120 compound was used to design peptides. Due to the size of the sequence of gp120 (>400 sequence length), each model required 2-3 hours to generate. As a result, due to Google Colab’s 24 hours runtime constraint, the hyperparameter search for all combinations was not complete due to timeout. However, referring to Fig10, the generated results were still sufficient to draw general observations. 
+
+First of all, confidence score pLDDT varies greatly with seed generation in the process, this suggests that the initialization of the start peptide sequence greatly determines the confidence later. Analyzing the relationship between the first 4-seeds generated with “pssm_semigreedy” and the yellow portion using “3stage”, it can be seen that use of a PSSM in the 3-stage process optimizes the result. Interestingly, changing the optimizer method will change the final sequence predicted. Across the same seeds, when a different optimizer is used, there are variations in specific regions of the sequence and remain the same for others. The remaining relationship to be determined was how the gradient descent method will impact the predicted confidence of the results. 
+
+<img width="589" alt="image" src="https://github.com/user-attachments/assets/90e2002d-6f61-4693-85f2-9f1f9f4276e0" />
+
+Fig10: Hyperparameter search of HIV gp120
+
+Another hyperparameter search was then performed with the hepatitis C compound “7T6X”. The rationale to change the molecule was due to more efficient use of computational resources, as the generation time for each 7T6X peptide was much faster (~30 minutes). Three forms of gradient descent were used - the standard Stochastic Gradient Descent (SGD), momentum based Adamw, and another adaptive learning method Adagrad. Referring to Fig. 11, it can be seen that for all 4 seeds, the pLDDT and i_con scores are the same across gradient descent methods. This suggests that the gradient descent method converges to the same result. But the fact that changing the seed varies greatly the results suggest that most of these are local minimas that are hard for even momentum based gradient descents to overcome. 
+
+<img width="581" alt="image" src="https://github.com/user-attachments/assets/ed108084-bc86-4e56-8f21-3bed1b538053" />
+
+Fig11: Hyperparameter search of HPC
+
+Exploration into how sequence length changes computation length
+Given the long computational time, another exploration was conducted to understand how increasing the peptide sequence length will increase the peptide generation time. To explore this, 30 models of each peptide sequence of lengths [10,15,20,25,30,35,40] were used to generate cyclic peptides for HPC (7T6X), and the computational time was logged. Fig 11 below shows the relationship chart of the computational time vs. sequence length. Overall there is a general increase in the computational time vs. sequence length. For each sequence, the 1st seed generated takes a longer time, perhaps due to an initial compiling of the model, which later seeds do not need to perform. Changing the sequence length for HPC did not change the position of where the peptide binds to the target, but rather only increases in the number of helices it forms as the sequence length increases. This suggests that changing the sequence length does change the peptide structure, but does not greatly impact the binding area. 
+
+<img width="642" alt="image" src="https://github.com/user-attachments/assets/87fefbd2-81b3-4765-9a5e-77019999e80d" />
+
+
+Fig 12: Computational time vs sequence length
+
+Generation of gp120 cyclic peptide
+Lastly, due to the early-runtime stop of gp120 previously encountered, another 5 models were generated of sequence length 13 using SGD, PSSM_semigreedy options for HIV gp120. Based on the generation, there was one candidate that had a confidence score of approximately 0.7, as seen in Fig 12. In purple is the cyclic peptide, which resides in between the gp120 and the adjacent chain. For comparison, highlighted in red is a molecule present in the experimental structure. The cyclic peptide in this case is predicted to bind to a different location than the red molecule. 
+
+The Rosetta Interface Analyzer score for this compound was negative, suggesting a potential binding and a SASA of 1195. For further peptide design, the usage of hotspots will be beneficial as it accounts for biological impacts of binding to a certain region over others. The generation of more complexes will also better increase the search space of the binding locations. 
+
+<img width="677" alt="image" src="https://github.com/user-attachments/assets/21d5e6d3-4a3c-4156-9367-a32edafdd85a" />
+
+Fig 13: Cyclic design for gp120
+
+# Areas for further exploration
+
+There are many further areas for exploration into the use of AlphaFold for designing of cyclic peptides. One critical area is reducing the generation time, which currently poses a challenge due to the constraints of the current working set-up. Perhaps the usage of more powerful GPUs could up the process. The ability to generate a large quantity of candidate peptides will provide a more broader searcher space for candidate selection. Secondly, as the backpropagation in the cyclic design process does not account for the biological metrics such as the binding energy & sasa scores. A further exploration will be to integrate key PyRosetta metrics or other biological measurement scores into the peptide generation process, potentially through auto-differential packages such as JAX. This can offer more nuanced control over the optimization process. Additionally, to better control where the peptide is hallucinated against, use of "hotspots" in the gp120 protein—such as particular residue regions—could yield more effective therapeutic candidates. Lastly, in the generation of large quantities of PDBs, another area to explore is the use of clustering methods based on generated torsion angles or other ML methods to refine the selection of promising peptide structures. These explorations hold the potential to significantly advance the field of peptide-based therapeutics for HIV.
+
+
+# Conclusion
+
+Overall, this project was successful in an in-depth exploration into the use of AlphaFold and other bioinformatic tools to generate cyclic peptide strucutres. The project first started with literature reviews to gain an understanding of the AlphaFold architecture and the generation process of new peptides. Based on the understanding, a peptide-generation pipeline was created to recreate results in the literature papers. These structures were then evaluated and shortlisted based on Rosetta scoring metrics to arrive at candidate peptides for each target in the literature. Lastly, an exploration into peptide generation was done with HIV GP120 and Hepatitis-C Glycoproteins to generate cyclic peptide candidates.
 
 
