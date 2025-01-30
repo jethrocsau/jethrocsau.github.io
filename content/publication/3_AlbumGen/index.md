@@ -69,7 +69,7 @@ projects: []
 #   Otherwise, set `slides: ""`.
 slides: AlbumGen_Presentation
 ---
-Full Text of [paper here](./paper.pdf).
+Full Text of [paper here](./report.pdf).
 Presentation of [AlbumGen with Demo here](./AlbumGen_Presentation.pdf).
 
 AlbumGen explores generating music from album cover art using a multi-step pipeline that incorporates image captioning, text-to-music generation, and explainable intermediaries. The aim is to connect the visual themes of album art with music creation, leveraging advances in computer vision and large language models. This project aims to explore the development of an image-to-music pipeline with LLMs. Rather than delving into philosophical interpretations of how music **should** be conditioned on image inputs, we strive to ground our pipeline on explainable intermediaries in the generation process through text. 
