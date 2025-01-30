@@ -8,12 +8,9 @@ tags:
   - RandomForest
 ---
 
-## Parallelization of Random Forest using PySpark (Equal Contributor)
-- Explored optimization of the Random Forest algorithm using parallel computing in Spark on Microsoft Azure to measure how to improve training time of random forest through the divide and conquer approach.
+In this study, we will leverage the Spark Python API to execute the random forest algorithm. This distributed variant of the random forest tree has the capacity to manage large datasets, and offers parallel training to increase the overall training time. To appraise the performance and scalability of the distributed random forest, we have conducted a comparative analysis on various factors. These include the algorithm's performance across different dataset sizes, executor counts, numbers of RDD partitions, and its performance in comparison to the built-in available algorithm in MLlib.
 
-- Developed three implementation strategies of distributed Random Forest - a top-down approach of parallelizing decision tree building and two bottom-up approaches that parallelize the node-splits algorithm (Depth-First and Breadth-First search)
-
-- Analyzed training times and computational overhead, proposing enhancements for dynamic partitioning and resource allocation.
+<img width="787" alt="image" src="https://github.com/user-attachments/assets/7680f06f-3742-4e05-8a79-9e3d8abe86a7" />
 
 
 <!--more-->
