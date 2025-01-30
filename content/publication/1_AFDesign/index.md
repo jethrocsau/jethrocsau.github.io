@@ -39,18 +39,18 @@ tags:
 featured: true
 
 url_pdf: ''
-url_code: 'https://github.com/jethrocsau/6000N-Multi-modality-LLM'
-url_dataset: 'https://marianaossilva.github.io/DSW2019/'
+url_code: ''
+url_dataset: ''
 url_poster: ''
 url_project: ''
 url_slides: ''
 url_source: 
-url_video: 'https://github.com/user-attachments/assets/43c1b02c-495e-46ff-b63e-791a9f0dc464'
+url_video: ''
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
 image:
-  caption: 'AlbumGen'
+  caption: 'AlphaFold2'
   focal_point: ''
   preview_only: false
 
@@ -66,7 +66,7 @@ projects: []
 #   Simply enter your slide deck's filename without extension.
 #   E.g. `slides: "example"` references `content/slides/example/index.md`.
 #   Otherwise, set `slides: ""`.
-slides: AlbumGen_Presentation
+slides: []
 ---
 (In Progress)
 
