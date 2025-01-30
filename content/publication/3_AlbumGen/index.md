@@ -78,16 +78,9 @@ AlbumGen explores generating music from album cover art using a multi-step pipel
 
 
 # Demo
-Some demos can be found (here)[https://drive.google.com/drive/folders/1t-uyCaodPABZ1XXOuIy0kBDqyK6o3S9v?usp=sharing]
+Some demos can be found [here](https://drive.google.com/drive/folders/1t-uyCaodPABZ1XXOuIy0kBDqyK6o3S9v?usp=sharing)
 
-## Album: FORCEFIELD - Tokyo Police Club
-![1P0lIorhtRjAXByoOcymGA](https://github.com/user-attachments/assets/2d2ec47f-33a2-48eb-a3ad-608b38cb2a17)
 
-**Without RAG:**
-https://github.com/user-attachments/assets/c7f05b19-e088-4789-85cc-3e5b6e27825d
-
-**With Rag:**
-https://github.com/user-attachments/assets/1d85f3f4-81d8-40bf-bf05-a03d2d90469f
 
 
 
