@@ -1,7 +1,7 @@
 ---
 # Leave the homepage title empty to use the site title
 title: "Jethro Au"
-date: 2022-10-24
+date: 2024-10-24
 type: landing
 
 design:
@@ -37,7 +37,7 @@ sections:
       text: |-
        AI/ML driven interventions against drug and therapeutic resistant pathogens and cancer cells. 
 
-        Along with my obsession with AI, I also spend my time building ventures for healthcare companies such as building medical devices using cationic polymers effective against MDROs, drug-discovery with generative AI, and infection surveillance systems!
+       I also spend my time building ventures for healthcare companies such as building medical devices using cationic polymers effective against MDROs, drug-discovery with generative AI, and infection surveillance systems!
         
         Please reach out to collaborate 😃
     design:
