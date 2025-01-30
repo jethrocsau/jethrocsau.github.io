@@ -38,7 +38,7 @@ Figure 2: Evoformer stack [2]
 **Structural block**
 The structural block takes in as inputs the abstract pair-wise representation after the Evoformer and computes the geometric representation of the structure, confidence and loss of its expected prediction. The fundamental method AlphaFold uses to represent the molecular structure is by envisioning the backbone as a series of triangles, which are represented as a tuple of rotational and translational parameters from an initial frame of reference. The rotational and translational parameters for each backbone triangle is initialized at the center of the frame of reference, and the backbone is updated based on an attention mechanism between Evoformer outputs. To predict the sidechains, an additional neural network was trained to predict the torsion angles inspired to mimic and predict the Ramachandran plot, resulting in the final predicted structure.
 
-<img width="1088" alt="image" src="https://github.com/user-attachments/assets/511c1e96-9143-4d9e-afc5-212f03d88714" />
+<img width="770" alt="image" src="https://github.com/user-attachments/assets/47e68765-083a-404e-aa65-9b884088ac0c" />
 Figure 3: Visualization of the structure model representation of structure [3]
 
 **ColabFold & ColabDesign:**
