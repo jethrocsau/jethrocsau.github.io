@@ -1,7 +1,7 @@
 ---
 title: AlphaFold2 for Cyclic Peptide Design - A Literature Review (2/2)
 summary: Literature Review on the AF2 architecture and its use for cyclic peptide design
-date: 2024-06-31
+date: "2024-06-31"
 authors:
   - admin
 tags:

@@ -1,7 +1,7 @@
 ---
 title: Bias & Toxicity - Lecture Slides
 summary: Lecture on Bias & Toxicity for LLMs by Jethro Au and Lai Chun Yu
-date: 2023-10-29
+date: "2023-10-29"
 authors:
   - admin
 tags:

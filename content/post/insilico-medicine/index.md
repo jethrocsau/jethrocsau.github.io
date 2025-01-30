@@ -1,7 +1,7 @@
 ---
 title: Insilico Medicine - Applying AI to Reduce Costs in Drug Discovery
 summary: Generative Drug-Discovery using Adversarial Auto-Generative Encoders
-date: 2023-09-25
+date: "2023-09-25"
 
 # Featured image
 # Place an image named `featured.jpg/png` in this page's folder and customize its options here.

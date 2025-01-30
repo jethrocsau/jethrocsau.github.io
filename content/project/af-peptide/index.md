@@ -1,6 +1,6 @@
 ---
 title: (In Progress) AlphaFold for De-Novo Cyclic Peptide Design for HIV
-date: 2025-01-30
+date: "2025-01-30"
 external_link: 
 tags:
   - AlphaFold
