@@ -9,7 +9,7 @@ tags:
   - Drug-Discovery
   - Literature Review
 image:
-  caption: 'Cyclic Peptide generation architecture - Kosugi et. al.'
+  caption: 'Cyclic Peptides Generated with AlphaFold'
 # Display this page in the Featured widget?
 featured: true
 ---
