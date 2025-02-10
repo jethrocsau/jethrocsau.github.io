@@ -33,7 +33,7 @@ As a high level overview, the recreation process was split into two parts:
 
 (2) 12PDB Structures: Cyclic peptides were generated for 11 out of 12 PDBs. Evaluation showed promising candidates, with most predicted structures binding in the expected positions.
 
-**Recreation of literature method in 1YCR **
+**Recreation of literature method in 1YCR**
 
 Firstly a recreation of the literature method to generate and evaluate generated designs was done with the PDB: 1YCR complex, or the MDM2, p53 peptide complex that is commonly studied. In accordance with the hyperparameters used for Tosugi, T., & Ohue, M, Design of Cyclic Peptides Targeting Protein–Protein Interactions Using AlphaFold, a ColabDesign workflow was developed based on AFDesign Github to generate 50 structures of cyclic peptides of sequence length 13. During the generation, 5 models were used, with standard loss weights, the SGD optimizer, and PSSM_semi_greedy(120,32). Referring to Fig 7, it can be seen that for all seeds, the per residue confidence metric increases greatly in the first 50 iterations, and optimizes as the logits are switched to one_hot_encodings. The median of the generated seeds have a median confidence score (pLDDT) of around 0.73 and a median of around 1.8 i_con value.
 
