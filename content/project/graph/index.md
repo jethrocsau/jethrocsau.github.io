@@ -1,15 +1,15 @@
 ---
-title: (In Progress) AlphaFold for De-Novo Cyclic Peptide Design for HIV
-date: "2025-01-30"
+title: Cross-domain task generalization of graphs with language embeddings
+date: "2025-05-01"
 external_link: 
 tags:
-  - AlphaFold
-  - Drug Discovery
+  - Graph Neural Networks
+  - Language Embeddings
   - Generative AI
-  - AI for Health
 ---
 
-This independent research study conducted a series of investigations to enhance the precision of cyclic peptide generation targeting the HIV gp120 trimer. The methods included proximity mapping to focus on the CD4 binding site, centroid distance penalization, generative loss tuning, and the development of custom generative functions. By synthesizing these findings, a novel methodology was implemented to generate candidate cyclic peptides of varying lengths. This process successfully produced cyclic peptides that resemble the crystal structure of CD4 attachment inhibitor (BMS-818251 molecule). This new methodology demonstrated improved control and precision in the generation of compounds, thereby enhancing the applicability of AlphaFold in the drug discovery process.
+[REPO LINK HERE](https://github.com/jethrocsau/GNN-language-embedded)
 
+Scaling and generalizing cross-domain tasks amongst graph datasets remains a challenge due to the variability in node features, edge-based relationships, and the inherit challenges for transfer-learning amongst graphs. The aim of this project is to explore the capabilities of using language embeddings to achieve task generalizations across different graph structures and build models that could learn cross-domain relationships. By evaluating the performance of trained graph neural networks across different language embeddings, the authors evaluate the effectiveness of various encoding architectures. Contrary to expectations, the simpler word2vec achieved greater performance compared to the E5-Small-V2 and GraphAlign pre-trained embeddings. Finally, the author discusses limitations and the conclusiveness of the study and discusses future research directions in unifying cross-domain graphs with scalable architecture.
 
 <!--more-->
