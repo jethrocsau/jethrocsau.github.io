@@ -40,6 +40,7 @@ profiles:
 
 interests:
   - AI for Drug Discovery
+  - Medical Language Models
   - Antimicrobial Resistance and Therapeutic Resistance
   - Multi-modal Agents
 
@@ -49,7 +50,7 @@ education:
     date_start: 2023-09-01
     date_end: 2025-05-31
     summary: |
-      GPA: 3.86/4.0
+      GPA: 4.0/4.3
   - area: BS Industrial Engineering
     institution: Northwestern University
     date_start: 2014-09-01
@@ -57,7 +58,7 @@ education:
     summary: |
 
 work:
-  - position: Head of Business Development
+  - position: R&D / Head of Business Development
     company_name: C-POLAR Asia
     company_url: ''
     company_logo: ''

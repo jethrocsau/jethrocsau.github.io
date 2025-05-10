@@ -35,7 +35,7 @@ sections:
       title: '📚 My Research'
       subtitle: ''
       text: |-
-       AI/ML driven interventions against drug and therapeutic resistant pathogens and cancer cells. 
+       AI/ML engineer specializing in generative drug design, medical language models, and data methods against drug and therapeutic resistant pathogens and cancer cells. 
 
        I also spend my time building ventures for healthcare companies such as building medical devices using cationic polymers effective against MDROs, drug-discovery with generative AI, and infection surveillance systems!
         
