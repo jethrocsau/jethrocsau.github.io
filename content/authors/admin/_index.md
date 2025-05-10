@@ -156,9 +156,9 @@ awards:
 ---
 ## About Me
 
-Hey there! I'm a data-scientist and venture builder for interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
+Hey there! I'm a machine learning engineer and data scientist with an interest in generative drug design, explainable medical language models, and multi-modal agents. I also enjoy researching interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
 
-Some projects I've worked on include: researching intervention methods tackling MDRO pathogens, de-novo peptide design for HIV using AlphaFold, infection surveillance mechanisms using IoT sensors and digital twins, and more.
+Some projects I've worked on include: generative de-novo peptide design for HIV using AlphaFold, recursive language models to reduce hallucinations, multi-modal generative agents, infection surveillance mechanisms using IoT sensors and digital twins, and more.
 
 You may also find me mixing music sometimes, or I'd like to refer as - "manual" audio-signal processing.
 
