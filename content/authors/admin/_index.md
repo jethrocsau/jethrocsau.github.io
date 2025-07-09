@@ -40,6 +40,7 @@ profiles:
 
 interests:
   - AI for Drug Discovery
+  - Medical Language Models
   - Antimicrobial Resistance and Therapeutic Resistance
   - Multi-modal Agents
 
@@ -49,7 +50,7 @@ education:
     date_start: 2023-09-01
     date_end: 2025-05-31
     summary: |
-      GPA: 3.86/4.0
+      GPA: 4.0/4.3
   - area: BS Industrial Engineering
     institution: Northwestern University
     date_start: 2014-09-01
@@ -57,7 +58,7 @@ education:
     summary: |
 
 work:
-  - position: Head of Business Development
+  - position: R&D / Head of Business Development
     company_name: C-POLAR Asia
     company_url: ''
     company_logo: ''
@@ -155,9 +156,9 @@ awards:
 ---
 ## About Me
 
-Hey there! I'm a data-scientist and venture builder for interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
+Hey there! I'm a machine learning engineer and data scientist with an interest in generative drug design, explainable medical language models, and multi-modal agents. I also enjoy researching interventions and prediction systems combating drug-resistant pathogens and therapeutic resistant cell mutations. 
 
-Some projects I've worked on include: researching intervention methods tackling MDRO pathogens, de-novo peptide design for HIV using AlphaFold, infection surveillance mechanisms using IoT sensors and digital twins, and more.
+Some projects I've worked on include: generative de-novo peptide design for HIV using AlphaFold, recursive language models to reduce hallucinations, multi-modal generative agents, infection surveillance mechanisms using IoT sensors and digital twins, and more.
 
 You may also find me mixing music sometimes, or I'd like to refer as - "manual" audio-signal processing.
 
