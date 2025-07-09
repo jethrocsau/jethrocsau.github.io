@@ -6,6 +6,7 @@ tags:
   - Graph Neural Networks
   - Language Embeddings
   - Generative AI
+featured: true
 ---
 
 [REPO LINK HERE](https://github.com/jethrocsau/GNN-language-embedded)
