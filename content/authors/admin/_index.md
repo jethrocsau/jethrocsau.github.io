@@ -20,11 +20,11 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: AI for Health / Venture Builder
+role: Healthcare Data Scientist | AI/ML Engineer | Venture Builder
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
-  - name: Hong Kong University of Science and Technology
+  - name: Harvard University
     url: 
 
 # Social network links
