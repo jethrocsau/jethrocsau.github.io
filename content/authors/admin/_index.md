@@ -45,7 +45,12 @@ interests:
   - Multi-modal Agents
 
 education:
-  - area: MS in Big Data Technology 
+  - area: MS in Healthcare Data Science
+    institution: Harvard University
+    date_start: 2023-08-25
+    date_end: Current
+    summary: 
+  - area: TGP Fellow in Big Data Technology (MS)
     institution: Hong Kong University of Science and Technology 
     date_start: 2023-09-01
     date_end: 2025-05-31
