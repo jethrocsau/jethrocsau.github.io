@@ -48,7 +48,7 @@ education:
   - area: MS in Healthcare Data Science
     institution: Harvard University
     date_start: 2023-08-25
-    date_end: Current
+    date_end: 2027-03-01
     summary: |
   - area: TGP Fellow in Big Data Technology (MS)
     institution: Hong Kong University of Science and Technology 
