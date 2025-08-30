@@ -49,7 +49,7 @@ education:
     institution: Harvard University
     date_start: 2023-08-25
     date_end: Current
-    summary: 
+    summary: |
   - area: TGP Fellow in Big Data Technology (MS)
     institution: Hong Kong University of Science and Technology 
     date_start: 2023-09-01
