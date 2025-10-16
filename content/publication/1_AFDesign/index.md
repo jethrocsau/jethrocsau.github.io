@@ -1,5 +1,5 @@
 ---
-title: 'Precision Generation of Cyclic Peptides using AlphaFold'
+title: 'Precision Design of Cyclic Peptides using AlphaFold'
 
 # Authors
 # If you created a profile for a user (e.g. the default `admin` user), write the username (folder name) here
@@ -22,12 +22,12 @@ publishDate: '2024-11-25T00:00:00Z'
 publication_types: ['report']
 
 # Publication name and optional abbreviated publication name.
-publication: Precision Generation of Cyclic Peptides using AlphaFold
+publication: Precision Design of Cyclic Peptides using AlphaFold
 publication_short:
 abstract: This independent research study conducted a series of investigations to enhance the precision of cyclic peptide generation targeting the HIV gp120 trimer. The methods included proximity mapping to focus on the CD4 binding site, centroid distance penalization, generative loss tuning, and the development of custom generative functions. By synthesizing these findings, a novel methodology was implemented to generate candidate cyclic peptides of varying lengths. This process successfully produced cyclic peptides that resemble the crystal structure of CD4 attachment inhibitor (BMS-818251 molecule). This new methodology demonstrated improved control and precision in the generation of compounds, thereby enhancing the applicability of AlphaFold in the drug discovery process.
 
 # Summary. An optional shortened abstract.
-summary: Precision Generation of Cyclic Peptides using AlphaFold
+summary: Precision Design of Cyclic Peptides using AlphaFold
 
 tags:
   - AlphaFold
