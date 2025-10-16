@@ -1,5 +1,5 @@
 ---
-title: AlphaFold for De-Novo Cyclic Peptide Design for HIV
+title: Precision Design of Cyclic Peptides using AlphaFold
 date: "2025-01-30"
 external_link: 'https://arxiv.org/abs/2510.13127'
 tags:
