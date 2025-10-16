@@ -20,12 +20,15 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: Healthcare Data Scientist | AI/ML Engineer | Venture Builder
+role: Healthcare Data Rese | AI/ML Research Engineer
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
   - name: Harvard University
     url: 
+  - name: Harvard Medical School / Massachusetts General Hospital AI & Robotics Lab
+    url: 'https://wang.hms.harvard.edu/'
+
 
 # Social network links
 # Need to use another icon? Simply download the SVG icon to your `assets/media/icons/` folder.
