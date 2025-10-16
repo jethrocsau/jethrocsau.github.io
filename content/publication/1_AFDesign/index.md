@@ -38,13 +38,13 @@ tags:
 # Display this page in the Featured widget?
 featured: true
 
-url_pdf: ''
+url_pdf: './Presentation_Sample_AlphaFold_For_Cyclic_Peptide_Design.pdf'
 url_code: ''
 url_dataset: ''
 url_poster: ''
 url_project: ''
 url_slides: ''
-url_source: 
+url_source: 'https://arxiv.org/abs/2510.13127'
 url_video: ''
 
 # Featured image
@@ -68,7 +68,6 @@ projects: ["af-peptide"]
 #   Otherwise, set `slides: ""`.
 slides: []
 ---
-(In Progress)
 
 Recent advancements in artificial intelligence have spurred scientific breakthroughs, particularly in drug discovery and protein engineering. Most notably, in 2024, the Nobel Prize in Chemistry was awarded to David Baker, Demis Hassabis, and John Jumper for their work in developing AlphaFold, a protein folding prediction model developed by DeepMind. Ever since AlphaFold2 demonstrated highly accurate protein structure predictions in the 14th Critical Assessment of Protein Structure Prediction - CASP14 - (Jumper et al.), the model has accelerated biological engineering in all facets of applications, ranging from drug discovery to developing novel polymers. Despite the research interest, explorations in adapting AlphaFold for cyclic peptide targeting HIV’s gp120 trimer have not been explored rigorously. 
 
