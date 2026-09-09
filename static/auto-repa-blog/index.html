@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect-REPA: When, Where, and How Long Should Diffusion Models Align Representations?</title>
+    <meta name="description" content="Three-stage Inspect-REPA study on when, where, and how long diffusion models should align representations, covering baseline confirmation, layer ablations, early-stop projection schedules, and long-horizon cosine annealing.">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="robots" content="all">
+
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-7.2.0-web/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css"/>
+    <script src="assets/scripts/navbar.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+            }
+        });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .blog .abstract,
+        .blog .text {
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 25px;
+            align-items: start;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .timeline-panel,
+        .plot-panel,
+        .comparison-panel,
+        .fft-panel {
+            background: #f6f8fb;
+            border: 1px solid #d7e0ea;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .timeline-panel img,
+        .plot-panel img,
+        .fft-panel img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+            padding-bottom: 0;
+        }
+
+        .timeline-controls {
+            display: grid;
+            grid-template-columns: auto auto auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            margin-top: 18px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .timeline-range {
+            width: 100%;
+            accent-color: #4f7bd9;
+        }
+
+        .timeline-step {
+            font-family: "Poppins", sans-serif;
+            font-size: 0.95rem;
+            color: #445469;
+            white-space: nowrap;
+        }
+
+        .timeline-note {
+            font-size: 0.92rem;
+            color: #506173;
+            margin-top: 12px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .plot-panel {
+            margin-top: 28px;
+            padding: 20px;
+        }
+
+        .comparison-band {
+            background-color: #eef3f8;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .comparison-band h2 {
+            text-align: center;
+            color: #2f435f;
+            margin-bottom: 30px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 30px;
+            align-items: start;
+        }
+
+        .comparison-panel {
+            position: relative;
+        }
+
+        .comparison-label {
+            position: absolute;
+            top: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .comparison-label.left {
+            left: 20px;
+        }
+
+        .comparison-label.right {
+            right: 20px;
+        }
+
+        .fft-panel {
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .comparison-note {
+            color: #506173;
+            margin-top: 30px;
+            border-top: 1px solid #d7e0ea;
+            padding-top: 20px;
+        }
+
+        .references-list {
+            padding-left: 1.25rem;
+        }
+
+        .references-list li {
+            margin-bottom: 0.9rem;
+            line-height: 1.55;
+        }
+
+        @media screen and (max-width: 900px) {
+            .timeline-grid,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-controls {
+                grid-template-columns: repeat(3, auto);
+            }
+
+            .timeline-range,
+            .timeline-step {
+                grid-column: 1 / -1;
+            }
+        }
+    </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+</head>
+
+<body>
+    <a href="/" style="display: block; padding: 0.6em 1.2em; background: #1c2b45; color: #fff; text-decoration: none; font-size: 0.85em; font-family: sans-serif;">&larr; Back to Jethro's Portfolio</a>
+    <div class="container blog" id="first-content" style="background-color: #304463;">
+        <div class="blog-title white">
+            <div class="blog-intro">
+                <div>
+                    <h1 class="title">Inspect-REPA: When, Where, and How Long Should Diffusion Models Align Representations?</h1>
+                    <p class="author">by Tianyu Zhao, Jethro Au</p>
+                    <p class="abstract" style="font-size: 0.75em; line-height: 1.65;">
+                        Representation alignment is usually trained as a static, always-on auxiliary loss for diffusion transformers. This project asks whether that assumption is necessary. We study the question in three stages on a SiT-B/2 backbone trained on ImageNet-100 at 256px latent diffusion. Stage 1 validates the baseline ordering of Vanilla, REPA, and iREPA and tests layer placement. Stage 2 studies hard early-stop schedules for the projection term. Stage 3 evaluates long-horizon cosine annealing over 250k steps. Across all stages, we analyze not only endpoint FID, KID, and Inception Score, but also optimization trajectories, synchronized sample timelines, and Pareto views in IS versus log(1/FID). The resulting picture is that alignment is most useful early, its schedule changes the fidelity-diversity path through training, and smooth late relaxation can outperform always-on alignment over a sufficiently long horizon.
+                    </p>
+                </div>
+
+                <div class="info">
+                    <div>
+                        <a href="https://github.com/zhaotianyu0702/Auto-REPA" class="button icon" style="background-color: rgba(255, 255, 255, 0.25); margin-bottom: 0;">Source Code <i class="fa-solid fa-code"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-cover">
+                <img class="foreground" src="figs/cover.webp" alt="Inspect-REPA cover image">
+                <img class="background" src="figs/cover.webp" alt="Inspect-REPA cover image background">
+            </div>
+        </div>
+    </div>
+
+    <div class="container blog main first" id="introduction">
+        <h1>1. Introduction and Motivation</h1>
+        <p class="text">
+            Representation alignment improves diffusion training by supervising intermediate activations with features from a pretrained visual encoder. REPA and iREPA show that this auxiliary signal can accelerate convergence, but later work also suggests that its benefit is not uniform over training.
+        </p>
+
+        <p class="text">
+            This motivates the Inspect-REPA question: <b>when, where, and for how long should a generative model receive alignment?</b> We treat alignment as an allocation problem rather than a fixed design choice. Stage 1 validates the baseline and the aligned layer. Stage 2 asks whether the projection loss can be turned off partway through training. Stage 3 asks whether a smooth long-horizon decay is better than a hard cutoff or an always-on schedule.
+        </p>
+    </div>
+
+    <div class="container blog main gray" id="related-work">
+        <h1>2. Related Work</h1>
+        <p class="text">
+            <a href="https://arxiv.org/abs/2410.06940">REPA</a> established the basic claim that diffusion transformers benefit from aligning intermediate hidden states to pretrained visual features. <a href="https://arxiv.org/abs/2512.10794">iREPA</a> strengthened that result by replacing the MLP projector with a convolutional projection and spatial normalization, arguing that spatial structure matters more than global semantic strength alone.
+        </p>
+
+        <p class="text">
+            <a href="https://arxiv.org/abs/2505.16792">HASTE</a> is the main bridge to the later stages of this project. It suggests that alignment helps early yet can plateau or become restrictive later, which turns schedule design into a first-class question rather than a minor tuning detail.
+        </p>
+
+        <p class="text">
+            Related directions such as <a href="https://arxiv.org/abs/2503.08253">SARA</a>, <a href="https://arxiv.org/abs/2510.11690">RAE</a>, and <a href="https://arxiv.org/abs/2503.18414">U-REPA</a> broaden the representation-alignment design space. The open problem is no longer whether external guidance can help, but which parts of that guidance are worth paying for. This project addresses that question through a staged study of layer choice and schedule design.
+        </p>
+    </div>
+
+    <div class="container blog main" id="experimental-setup">
+        <h1>3. Experimental Setup</h1>
+        <img src="figs/experimental_setup_summary.svg" style="width: 92%; display: block; margin: 20px auto;" alt="Experimental setup summary across all three stages">
+        <p class="caption">
+            Experimental protocol summary used across the three-stage study.
+        </p>
+    </div>
+
+    <div class="container blog main gray" id="stage-1">
+        <h1>4. Stage 1: Baseline Confirmation and Layer Ablation</h1>
+        <p class="text">
+            Stage 1 establishes the aligned anchor used by the later schedule studies. It first checks that a faithful small-scale implementation preserves the expected ordering of Vanilla, REPA, and iREPA, then asks the first allocation question: <b>which internal layer should receive alignment?</b>
+        </p>
+
+        <h2>4.1 Baseline Confirmation</h2>
+        <p class="text">
+            The baseline runs provide a clean signal. Vanilla is a valid control, while both aligned variants separate from it by the middle of training. The main Stage 1 result is therefore not just final ranking, but faster convergence under alignment.
+        </p>
+
+        <img src="figs/baseline_training_dynamics.webp" style="width: 92%; display: block; margin: 20px auto;" alt="Training dynamics across Vanilla, REPA, and iREPA">
+        <p class="caption">
+            <b>Figure 1.</b> Training-side dynamics across Vanilla, REPA, and iREPA. Vanilla remains a clean control, REPA maintains active alignment, and iREPA reaches the lowest final denoising loss.
+        </p>
+
+        <img src="figs/baseline_eval_metrics.webp" style="width: 92%; display: block; margin: 20px auto;" alt="Checkpoint evaluation metrics across Vanilla, REPA, and iREPA">
+        <p class="caption">
+            <b>Figure 2.</b> Checkpoint evaluation curves. The main signal is not only the final ranking but the faster mid-stage improvement of aligned training relative to Vanilla.
+        </p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead class="center">
+                    <tr>
+                        <th>Method</th>
+                        <th colspan="3">30k Checkpoint</th>
+                        <th colspan="3">50k Checkpoint</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>FID ↓</th>
+                        <th>IS ↑</th>
+                        <th>KID ↓</th>
+                        <th>FID ↓</th>
+                        <th>IS ↑</th>
+                        <th>KID ↓</th>
+                    </tr>
+                </thead>
+                <tbody class="center">
+                    <tr>
+                        <td>Vanilla</td>
+                        <td>356.04</td>
+                        <td>1.3580</td>
+                        <td>0.4142</td>
+                        <td>348.97</td>
+                        <td>1.3712</td>
+                        <td>0.3986</td>
+                    </tr>
+                    <tr>
+                        <td>REPA (L8)</td>
+                        <td><b>351.79</b></td>
+                        <td><b>1.3692</b></td>
+                        <td><b>0.4049</b></td>
+                        <td>347.79</td>
+                        <td><b>1.3837</b></td>
+                        <td>0.3957</td>
+                    </tr>
+                    <tr>
+                        <td>iREPA (L8)</td>
+                        <td>352.30</td>
+                        <td>1.3604</td>
+                        <td>0.4069</td>
+                        <td><b>346.88</b></td>
+                        <td>1.3836</td>
+                        <td><b>0.3943</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="text">
+            The mid-stage checkpoints make the separation easiest to read. At 30k, REPA already leads Vanilla on all three metrics, while iREPA is competitive on FID and KID. By 50k, both aligned variants outperform Vanilla across the board, with iREPA taking the strongest FID/KID position. This establishes a credible aligned reference trajectory for the later schedule studies.
+        </p>
+
+        <div class="columns-3">
+            <div>
+                <img src="figs/vanilla_fixed_100k.webp" alt="Vanilla fixed seed samples at 100k">
+                <p class="caption"><b>Vanilla</b><br>Fixed-seed samples at 100k.</p>
+            </div>
+            <div>
+                <img src="figs/repa_fixed_100k.webp" alt="REPA fixed seed samples at 100k">
+                <p class="caption"><b>REPA (L8)</b><br>Fixed-seed samples at 100k.</p>
+            </div>
+            <div>
+                <img src="figs/irepa_fixed_100k.webp" alt="iREPA fixed seed samples at 100k">
+                <p class="caption"><b>iREPA (L8)</b><br>Fixed-seed samples at 100k.</p>
+            </div>
+        </div>
+
+        <h2>4.2 Layer Ablation for iREPA</h2>
+        <p class="text">
+            We next vary the aligned block while keeping the rest of the iREPA recipe fixed. The practical question is whether earlier layers improve <b>mid-stage acceleration</b> enough to challenge the standard Layer 8 anchor.
+        </p>
+
+        <img src="figs/irepa_layer_eval_metrics.webp" style="width: 92%; display: block; margin: 20px auto;" alt="iREPA layer-ablation evaluation metrics">
+        <p class="caption">
+            <b>Figure 3.</b> iREPA layer-ablation checkpoint curves. Earlier layers are competitive in the faster-convergence regime, while Layer 8 remains the strongest final endpoint.
+        </p>
+
+        <p class="text">
+            The iREPA sweep is tight, but the pattern is clear enough: earlier layers are competitive in the fast-convergence regime, while Layer 8 remains the most stable final anchor. The practical takeaway is that iREPA benefits from earlier-layer acceleration without forcing a change to the baseline configuration inherited by Stages 2 and 3.
+        </p>
+
+        <h2>4.3 Layer Ablation for REPA</h2>
+        <p class="text">
+            We repeat the same sweep for REPA to test whether the early-layer effect is specific to iREPA or a broader property of representation-aligned training.
+        </p>
+
+        <img src="figs/repa_layer_eval_metrics.webp" style="width: 92%; display: block; margin: 20px auto;" alt="REPA layer-ablation evaluation metrics">
+        <p class="caption">
+            <b>Figure 4.</b> REPA layer-ablation checkpoint curves. Layer 4 is best very early, reinforcing the view that earlier layers can help reach a better regime faster.
+        </p>
+
+        <p class="text">
+            REPA shows the sharper early-layer effect. Layer 4 is best at the earliest checkpoint, and the separation is cleaner than in iREPA. By the mid-stage checkpoints the curves regroup, which suggests that the main gain of earlier-layer alignment is faster entry into a good regime rather than a radically different final endpoint.
+        </p>
+
+        <h2>4.4 Stage 1 Takeaway</h2>
+        <p class="text">
+            Stage 1 establishes a usable anchor for the rest of the project. Alignment is beneficial, the strongest signal is the <b>mid-stage convergence advantage</b>, and earlier layers can help the model reach that regime faster. With that anchor in place, the next question is no longer whether alignment works, but how it should be <b>scheduled</b>.
+        </p>
+    </div>
+
+    <div class="container blog main" id="stage-2">
+        <h1>5. Stage 2: Early-Stop Projection Ablation</h1>
+        <p class="text">
+            Stage 1 established iREPA (Layer 8) as the strongest aligned anchor. Stage 2 builds on that by asking whether the projection term needs to stay active for the full training run — or whether switching it off at the right point can recover most of the quality benefit at lower alignment cost. The core hypothesis, motivated by HASTE, is that projection pressure is most valuable early in training when representations are still unanchored, and contributes diminishing returns once the model has consolidated a stable feature space. To test this, we hold the backbone, teacher, and 100k horizon fixed, and vary only the cutoff point across four schedules: <b>stop-10</b>, <b>stop-50</b>, <b>stop-75</b>, and <b>full</b> (always-on reference).
+        </p>
+
+        <h2>5.1 Training Diagnostics</h2>
+        <p class="text">
+            Figures 5 and 8 show the projection-loss curves and fixed-seed sample timeline side by side — the scalar intervention and its qualitative effect on generated samples across the 100k run.
+        </p>
+
+        <div class="plot-panel">
+            <img src="figs/stage2_training/phase2_proj_loss_curve.webp" alt="Stage 2 projection loss curves across early-stop ablations">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 5.</b> Stage 2 projection-loss curves. Each sparse variant drops to zero at its designated early-stop fraction, while the full schedule maintains alignment pressure throughout.</p>
+        </div>
+
+        <div class="timeline-grid">
+            <div class="timeline-panel">
+                <img id="stage2-full-frame" src="figs/stage2_training/irepa_full/fixed_seed_grid_step_000000.webp" alt="Always-on iREPA training sample timeline">
+                <p class="caption center" style="margin-top: 12px;">Always-On iREPA (full schedule)</p>
+            </div>
+
+            <div class="timeline-panel">
+                <img id="stage2-stop50-frame" src="figs/stage2_training/irepa_stop50/fixed_seed_grid_step_000000.webp" alt="Stop-50 iREPA training sample timeline">
+                <p class="caption center" style="margin-top: 12px;">Sparse iREPA (stop-50)</p>
+            </div>
+        </div>
+
+        <div class="timeline-controls">
+            <a class="button icon" id="stage2-play"><i class="fa-solid fa-play"></i></a>
+            <a class="button icon" id="stage2-slower"><i class="fa-solid fa-backward"></i></a>
+            <a class="button icon" id="stage2-faster"><i class="fa-solid fa-forward"></i></a>
+            <input id="stage2-scrubber" class="timeline-range" type="range" min="0" max="12" value="0" step="1">
+            <span id="stage2-step-label" class="timeline-step">Checkpoint: 0</span>
+        </div>
+        <p class="timeline-note">
+            <b>Figure 8.</b> Stage 2 synchronized training timeline. Scrub or autoplay to inspect fixed-seed sample evolution across the 100k horizon for the full schedule and the stop-50 sparse schedule.
+        </p>
+
+        <h2>5.2 Performance Metrics</h2>
+        <p class="text">
+            Figures 6 and 7 show the checkpoint metrics and per-metric deltas across all four schedules. Stop-10 produces the largest quality degradation; stop-75 incurs a near-invisible FID and KID penalty while IS edges above the always-on baseline — projection pressure is front-loaded, and its marginal value decays as the representation consolidates.
+        </p>
+
+        <div class="plot-panel">
+            <img src="figs/phase2_performance_evaluation_over_checkpoints.webp" alt="Stage 2 evaluation metrics over checkpoints">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 6.</b> Stage 2 evaluation metrics: FID, KID, and IS recorded at every 10k checkpoint across the 100k trajectory for all early-stop variants.</p>
+        </div>
+
+        <div class="plot-panel">
+            <img src="figs/phase2_performance_delta_irepa_ablation.webp" alt="Stage 2 performance delta across iREPA ablations">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 7.</b> Stage 2 performance delta: per-metric deviation of each sparse schedule relative to the always-on <code>irepa_full</code> baseline across all evaluated checkpoints.</p>
+        </div>
+
+        <h2>5.3 Understanding the Stage 2 Divergence</h2>
+        <p class="text">
+            When early stopping hurts quality, the natural question is: <em>is that a structural problem or an efficiency problem?</em> An efficiency problem would mean the model is still heading in the right direction — just taking smaller steps, progressing more slowly. A structural problem would mean the schedule has redirected the optimization toward a different region of the outcome space entirely. A marginal utility framing helps distinguish the two: if each active projection step is an investment with diminishing returns, an efficient early stop should leave the model on the same Pareto frontier — just at an earlier point along it. But if removing alignment redirects the trajectory, the model moves to a <em>different</em> Pareto path, trading off fidelity and diversity in a different order or proportion. 
+        </p>
+        <p class="text">
+            To look at this, Figure 9 plots IS versus log(1/FID) trajectories in a <b>Pareto-style view</b>, where the upper-right corner is jointly preferred and the <em>path</em> each schedule takes through that space is as informative as its final position. If the penalty is purely one of efficiency, the sparse schedules should trace similar paths to the full baseline — just progressing more slowly. If it is structural, the trajectories will diverge in direction, not just in pace.
+        </p>
+
+        <div class="plot-panel">
+            <img src="figs/irepa_100000_raw_log_isc_vs_fid.webp" alt="Stage 2 Pareto frontier between Inception Score and log one over FID">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 9.</b> Stage 2 Pareto view: IS versus log(1/FID) optimization trajectories at 10k-step resolution for all early-stop variants.</p>
+        </div>
+
+        <p class="text">
+            Always-on iREPA moves predominantly along the log(1/FID) axis first, acquiring diversity later. Early-stopped variants invert this order — rising along IS before converging toward FID — most sharply for stop-10 and progressively weaker for stop-50. Schedule timing changes not just the magnitude of quality achieved, but the order in which fidelity and diversity are acquired.
+        </p>
+
+        <h2>5.4 Stage 2 Takeaway</h2>
+        <p class="text">
+            Projection pressure is <b>front-loaded</b>: marginal returns are highest early and decay as representations stabilize. Removing alignment late (stop-75) costs almost nothing; removing it too early (stop-10) causes real degradation. More importantly, the Pareto view shows this is a structural effect — schedule timing changes the <em>order</em> in which fidelity and diversity are acquired, not just the final endpoint.
+        </p>
+    </div>
+
+    <div class="container blog main gray" id="stage-3">
+        <h1>6. Stage 3: Parameterized Schedule Study</h1>
+        <p class="text">
+            Stage 2 shows that hard cutoffs can approximate always-on alignment at low cost, but they are blunt instruments — the schedule is fixed before training begins and cannot respond to how the optimization is actually unfolding. That raises a natural follow-up: <em>can we design a parameterized schedule that is expressive enough to study alignment decay, while also being a credible candidate for improvement?</em> A smooth decay gives us a continuous knob to study whether quality differences are structural — the schedule is redirecting the optimization path — or simply an efficiency problem — the model is on the same path but progressing more slowly. Stage 3 tests this with a single comparison: <b>cosine annealing</b> versus always-on iREPA over a <b>250k</b> horizon.
+        </p>
+
+        <h2>6.1 Long-Horizon Cosine Schedule at 250k</h2>
+
+        <h3>Schedule Definition</h3>
+        <p class="text">
+            Let the training step be \(k\), the total number of steps be \(T\), the denoising loss be \(\mathcal{L}_{\text{denoise}}\), and the projection loss be \(\mathcal{L}_{\text{proj}}\). The base objective is
+        </p>
+        <p class="text">
+            $$
+            \mathcal{L}(k) = \mathcal{L}_{\text{denoise}}(k) + \lambda_{\text{proj}}(k)\,\mathcal{L}_{\text{proj}}(k).
+            $$
+        </p>
+
+        <p class="text">
+            For the <b>fixed</b> schedule, the projection multiplier remains constant:
+        </p>
+        <p class="text">
+            $$
+            \lambda_{\text{proj}}^{\text{fixed}}(k) = 1.
+            $$
+        </p>
+
+        <p class="text">
+            For the <b>cosine</b> schedule implemented in the loss function, define normalized progress \(p = k / T\), start fraction \(s\), end fraction \(e\), and normalized in-window coordinate \(x = (p - s)/(e - s)\). Then
+        </p>
+        <p class="text">
+            $$
+            \lambda_{\text{proj}}^{\text{cos}}(k) =
+            \begin{cases}
+            \frac{1}{2}\left(1 + \cos(\pi x)\right), & s \le p < e, \\
+            0, & \text{otherwise.}
+            \end{cases}
+            $$
+        </p>
+
+        <p class="text">
+            In the cosine run, the interval spans the full training horizon, so \(s = 0\) and \(e = 1\). At initialization, \(p = 0\), hence \(x = 0\) and \(\lambda_{\text{proj}}^{\text{cos}}(0) = 1\), matching the fixed iREPA weight exactly at step zero and decaying continuously to zero by step \(T\).
+        </p>
+
+        <h3>Training Diagnostics</h3>
+        <p class="text">
+            Figures 10 and 13 show the projection-loss decay and fixed-seed sample evolution across the 250k horizon — the cosine weight tracks the fixed schedule closely early on before diverging smoothly as the multiplier decays.
+        </p>
+
+        <div class="plot-panel">
+            <img src="figs/phase_3_proj_loss_curve.webp" alt="Stage 3 projection loss curves across fixed and cosine schedules">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 10.</b> Stage 3 projection-loss curves: fixed versus cosine iREPA over the 250k horizon.</p>
+        </div>
+
+        <div class="timeline-grid">
+            <div class="timeline-panel">
+                <img id="stage3-fixed-frame" src="figs/stage3_training/fixed/fixed_seed_grid_step_000000.webp" alt="Fixed iREPA long-horizon training timeline">
+                <p class="caption center" style="margin-top: 12px;">Fixed iREPA (full 250k schedule)</p>
+            </div>
+
+            <div class="timeline-panel">
+                <img id="stage3-cosine-frame" src="figs/stage3_training/cosine/fixed_seed_grid_step_000000.webp" alt="Cosine iREPA long-horizon training timeline">
+                <p class="caption center" style="margin-top: 12px;">Cosine iREPA (250k)</p>
+            </div>
+        </div>
+
+        <div class="timeline-controls">
+            <a class="button icon" id="stage3-play"><i class="fa-solid fa-play"></i></a>
+            <a class="button icon" id="stage3-slower"><i class="fa-solid fa-backward"></i></a>
+            <a class="button icon" id="stage3-faster"><i class="fa-solid fa-forward"></i></a>
+            <input id="stage3-scrubber" class="timeline-range" type="range" min="0" max="27" value="0" step="1">
+            <span id="stage3-step-label" class="timeline-step">Checkpoint: 0</span>
+        </div>
+        <p class="timeline-note">
+            <b>Figure 13.</b> Stage 3 synchronized training timeline. Scrub or autoplay to inspect fixed-seed sample evolution across the 250k horizon for fixed iREPA and cosine iREPA.
+        </p>
+
+        <h3>Metric Comparison</h3>
+        <div class="plot-panel">
+            <img src="figs/phase3_fid_kid_isc.webp" alt="Stage 3 cosine schedule metrics at 250k">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 11.</b> Stage 3 evaluation metrics (FID, KID, IS) at 50k-step intervals over the 250k training horizon for fixed and cosine iREPA.</p>
+        </div>
+
+        <p class="text">
+            Cosine annealing opens with an early FID and IS deficit — even a gentle decay relaxes projection pressure before fidelity has consolidated. The gap narrows through the mid-horizon as the diminishing-returns dynamic from Stage 2 takes hold. The decisive inflection is between <b>200k</b> and <b>250k</b>: by the final checkpoint cosine overtakes fixed iREPA on FID, KID, and IS simultaneously, a benefit that only materialises when the horizon is long enough for late-stage relaxation to matter.
+        </p>
+
+        <h3>Pareto Frontier View</h3>
+
+        <div class="plot-panel">
+            <img src="figs/irepa_250k_full_vs_cosine_raw_log_isc_vs_fid.webp" alt="Stage 3 Pareto frontier between Inception Score and log one over FID for fixed versus cosine iREPA">
+            <p class="caption center" style="margin-top: 14px;"><b>Figure 12.</b> Stage 3 Pareto view: IS versus log(1/FID) trajectories at 50k-step resolution for fixed and cosine iREPA over the 250k horizon.</p>
+        </div>
+
+        <p class="text">
+            Both schedules make joint progress toward the upper-right (preferred) region through 100k. After that they diverge — and what is particularly interesting here is not just that cosine ends better, but <em>how</em> the fixed schedule behaves. iREPA_full <b>backtracks by 200k</b>, regressing on both IS and log(1/FID) before a partial late recovery. This is not a plateau but a genuine reversal, suggesting that sustaining full projection pressure deep into training may gradually push the model away from a jointly preferred outcome. Scalar endpoints would smooth over this — the final numbers might still look reasonable — but the trajectory makes the instability visible.
+        </p>
+        <p class="text">
+            Cosine annealing appears to avoid this. By gradually relaxing projection pressure, it seems to prevent the model from becoming over-constrained in the way the fixed schedule does. The result is a more stable path — moving forward, or at least holding, on at least one axis per checkpoint. By <b>250k</b> it reaches a Pareto-superior point on both IS and log(1/FID), with the gain seeming to come from sidestepping the late-stage regression rather than from simply training longer.
+        </p>
+
+        <h3>Residual and Frequency Views</h3>
+    </div>
+
+    <div class="container blog extra-large comparison-band">
+        <h2>Generational Comparison at 250k Steps</h2>
+
+        <div class="comparison-grid">
+            <div class="comparison-panel">
+                <img-comparison-slider class="slider-container" style="outline: none;">
+                    <figure slot="first" class="before" style="margin: 0;">
+                        <img src="figs/residuals/250k_residuals_FullvCosine/sample_irepa_fixed_250k.webp" style="border-radius: 8px; width: 100%;" alt="Fixed iREPA final 250k sample">
+                        <figcaption class="comparison-label left">Fixed iREPA</figcaption>
+                    </figure>
+                    <figure slot="second" class="after" style="margin: 0;">
+                        <img src="figs/residuals/250k_residuals_FullvCosine/sample_irepa_cosine_250k.webp" style="border-radius: 8px; width: 100%;" alt="Cosine iREPA final 250k sample">
+                        <figcaption class="comparison-label right">Cosine iREPA</figcaption>
+                    </figure>
+                </img-comparison-slider>
+                <p class="caption center" style="margin-top: 15px;">Slide to compare latent structure and fine boundary edits.</p>
+            </div>
+
+            <div class="comparison-panel">
+                <img src="figs/residuals/250k_residuals_FullvCosine/rgb_residual_step_final.webp" style="width: 100%; border-radius: 8px; display: block;" alt="Signed luminance residual between fixed and cosine iREPA">
+                <p class="caption center" style="margin-top: 15px;">Signed luminance residual (blue = fixed brighter, red = cosine brighter)</p>
+            </div>
+        </div>
+
+        <div class="fft-panel">
+            <img id="fft-timeline-frame" src="figs/fft/fft_step_000000.webp" alt="FFT comparison over training horizon">
+            <div class="timeline-controls" style="margin-top: 16px;">
+                <a class="button icon" id="fft-play"><i class="fa-solid fa-play"></i></a>
+                <a class="button icon" id="fft-slower"><i class="fa-solid fa-backward"></i></a>
+                <a class="button icon" id="fft-faster"><i class="fa-solid fa-forward"></i></a>
+                <input id="fft-scrubber" class="timeline-range" type="range" min="0" max="27" value="0" step="1">
+                <span id="fft-step-label" class="timeline-step">Checkpoint: 0</span>
+            </div>
+            <p class="caption center" style="margin-top: 14px;">Spatial-frequency power spectrum and cosine/fixed power ratio across the 250k training horizon.</p>
+        </div>
+
+        <p class="caption comparison-note">
+            <b>Figure 14.</b> Final sample comparison and signed luminance residual at the 250k checkpoint. Left: fixed iREPA versus cosine iREPA. Right: pixel-level signed residual. <b>Figure 15.</b> Per-checkpoint spatial-frequency analysis across the 250k horizon.
+        </p>
+    </div>
+
+    <div class="container blog main gray" id="stage-3-analysis">
+        <h2>6.2 Residual, Frequency Analysis and Takeaway</h2>
+        <p class="text">
+            The signed luminance residual (Figure 14) shows divergence at object edges and contour transitions — structural rather than a global brightness shift. Two frequency regimes stand out in the FFT view (Figure 15). At <b>coarsest global scales</b>, fixed iREPA carries somewhat more power through the mid-to-late phase. At <b>intermediate scales</b> capturing contours and fine detail, cosine progressively opens capacity as the projection weight decays — consistent with the Pareto interpretation that fixed alignment persistently anchors coarse structure at the cost of finer scales.
+        </p>
+        <p class="text">
+            The early FID cost of cosine annealing is transient. By 250k it reaches a <b>Pareto-superior</b> outcome on FID, KID, and IS — with gains localised to intermediate spatial frequencies where fixed alignment appears to constrain capacity. Alignment is an allocation problem: the question is not whether to use it, but how its weight should evolve.
+        </p>
+    </div>
+
+    <div class="container blog main" id="limitations">
+        <h1>7. Limitations</h1>
+        <p class="text">
+            The framework established here is useful for studying scheduled representation alignment, but several limitations bound the conclusions that can be drawn responsibly.
+        </p>
+
+        <h2>7.1 Computational Cost and Evaluation Density</h2>
+        <p class="text">
+            Each full run on a single A100 80GB GPU is expensive, which limits checkpoint density and the size of schedule sweeps. In the 250k stage, evaluation is necessarily coarsened to 50k-step intervals, so the Pareto trajectory is sampled only sparsely. Fine-grained dynamics between checkpoints, including transient crossovers or brief reversals, remain unobserved.
+        </p>
+
+        <h2>7.2 Schedule Expressiveness and Adaptivity</h2>
+        <p class="text">
+            The cosine schedule is a meaningful step toward smooth, parameterized decay, but it remains a fixed functional form chosen before training. It does not respond to the model's observed state. More expressive alternatives could treat the alignment coefficient as a policy over the Pareto state, or search over schedule families with Bayesian or evolutionary optimization. Those directions remain compute-prohibitive at the present scale.
+        </p>
+
+        <h2>7.3 Training Scale and Generalizability</h2>
+        <p class="text">
+            All experiments are conducted on <b>ImageNet-100</b> at <b>256px</b> with a <b>SiT-B/2</b> backbone and training budgets of 100k to 250k steps. This small-scale regime enables rapid iteration, but it introduces scale sensitivity. The dynamics of REPA-style alignment depend on model capacity, teacher choice, and dataset complexity, so conclusions drawn here should be treated as evidence of a mechanism rather than as a finalized large-scale training recipe.
+        </p>
+    </div>
+
+    <div class="container blog main gray" id="conclusion">
+        <h1>8. Conclusion &amp; Path Forward</h1>
+        <p class="text">
+            Across three stages, Inspect-REPA traces alignment from a validated baseline through early-stop ablations to a long-horizon cosine schedule. Stage 1 confirms that iREPA accelerates convergence and that earlier layers help the model reach a good regime faster. Stage 2 shows that projection pressure is front-loaded: removing it late (stop-75) costs almost nothing, while removing it too early causes measurable degradation — and schedule timing changes not just the amount of quality achieved, but the order in which fidelity and diversity are acquired. Stage 3 shows that cosine annealing avoids the late-stage Pareto backtracking observed in always-on iREPA, reaching a jointly superior outcome on FID, KID, and IS by 250k.
+        </p>
+        <p class="text">
+            The main conclusion is not that less alignment is always better, but that alignment should be treated as a resource to allocate. The optimization trajectory through fidelity-diversity space is a more informative object than scalar endpoints alone — and the natural next step is moving from fixed schedules to adaptive policies that respond to the model's observed training state.
+        </p>
+    </div>
+
+    <div class="container blog main" id="references">
+        <h1>9. References</h1>
+        <ol class="references-list">
+            <li>
+                <b>REPA.</b> “Representation Alignment for Generation.”
+                <a href="https://arxiv.org/abs/2410.06940">arXiv:2410.06940</a>.
+            </li>
+            <li>
+                <b>iREPA.</b> “Inversion-Free Representation Alignment for Image Generation.”
+                <a href="https://arxiv.org/abs/2512.10794">arXiv:2512.10794</a>.
+            </li>
+            <li>
+                <b>HASTE.</b> “REPA Works Until It Doesn’t: Early-Stopped, Holistic Alignment for Diffusion Transformers.”
+                <a href="https://arxiv.org/abs/2505.16792">arXiv:2505.16792</a>.
+            </li>
+            <li>
+                <b>SARA.</b> “Semantic-Aware Representation Alignment for Generation.”
+                <a href="https://arxiv.org/abs/2503.08253">arXiv:2503.08253</a>.
+            </li>
+            <li>
+                <b>RAE.</b> “Representation Autoencoders for Diffusion Transformers.”
+                <a href="https://arxiv.org/abs/2510.11690">arXiv:2510.11690</a>.
+            </li>
+            <li>
+                <b>U-REPA.</b> “Aligning Diffusion U-Nets to ViTs.”
+                <a href="https://arxiv.org/abs/2503.18414">arXiv:2503.18414</a>.
+            </li>
+        </ol>
+    </div>
+
+    <footer>
+        <div class="container">
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="clarity/clarity.js"></script>
+    <script src="assets/scripts/main.js"></script>
+    <script>
+        const stage2Frames = [
+            { file: "fixed_seed_grid_step_000000.webp", label: "0" },
+            { file: "fixed_seed_grid_step_0000001.webp", label: "1" },
+            { file: "fixed_seed_grid_step_0010000.webp", label: "10k" },
+            { file: "fixed_seed_grid_step_0020000.webp", label: "20k" },
+            { file: "fixed_seed_grid_step_0030000.webp", label: "30k" },
+            { file: "fixed_seed_grid_step_0040000.webp", label: "40k" },
+            { file: "fixed_seed_grid_step_0050000.webp", label: "50k" },
+            { file: "fixed_seed_grid_step_0060000.webp", label: "60k" },
+            { file: "fixed_seed_grid_step_0070000.webp", label: "70k" },
+            { file: "fixed_seed_grid_step_0080000.webp", label: "80k" },
+            { file: "fixed_seed_grid_step_0090000.webp", label: "90k" },
+            { file: "fixed_seed_grid_step_0100000.webp", label: "100k" },
+            { file: "fixed_seed_grid_step_final.webp", label: "final" }
+        ];
+
+        const stage3Frames = [
+            { file: "fixed_seed_grid_step_000000.webp", label: "0" },
+            { file: "fixed_seed_grid_step_0000001.webp", label: "1" },
+            ...Array.from({ length: 25 }, (_, idx) => {
+                const step = String((idx + 1) * 10000).padStart(7, "0");
+                return { file: `fixed_seed_grid_step_${step}.webp`, label: `${idx + 1}0k` };
+            }),
+            { file: "fixed_seed_grid_step_final.webp", label: "final" }
+        ];
+
+        const setupTimeline = ({ frames, leftImageId, rightImageId, leftPrefix, rightPrefix, scrubberId, labelId, playId, slowerId, fasterId }) => {
+            const leftFrame = document.getElementById(leftImageId);
+            const rightFrame = document.getElementById(rightImageId);
+            const scrubber = document.getElementById(scrubberId);
+            const stepLabel = document.getElementById(labelId);
+            const playButton = document.getElementById(playId);
+            const slowerButton = document.getElementById(slowerId);
+            const fasterButton = document.getElementById(fasterId);
+
+            if (!leftFrame || !rightFrame || !scrubber || !stepLabel || !playButton || !slowerButton || !fasterButton) {
+                return;
+            }
+
+            let timer = null;
+            let intervalMs = 1200;
+
+            const updateFrame = (index) => {
+                const frame = frames[index];
+                leftFrame.src = `${leftPrefix}/${frame.file}`;
+                rightFrame.src = `${rightPrefix}/${frame.file}`;
+                stepLabel.textContent = `Checkpoint: ${frame.label}`;
+                scrubber.value = index;
+            };
+
+            const stopPlayback = () => {
+                if (timer) {
+                    window.clearInterval(timer);
+                    timer = null;
+                    playButton.innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+            };
+
+            const startPlayback = () => {
+                stopPlayback();
+                playButton.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                timer = window.setInterval(() => {
+                    const nextIndex = (Number(scrubber.value) + 1) % frames.length;
+                    updateFrame(nextIndex);
+                }, intervalMs);
+            };
+
+            scrubber.max = String(frames.length - 1);
+            updateFrame(0);
+
+            scrubber.addEventListener("input", (event) => {
+                updateFrame(Number(event.target.value));
+            });
+
+            playButton.addEventListener("click", () => {
+                if (timer) {
+                    stopPlayback();
+                } else {
+                    startPlayback();
+                }
+            });
+
+            slowerButton.addEventListener("click", () => {
+                intervalMs = Math.min(intervalMs * 1.25, 4000);
+                if (timer) startPlayback();
+            });
+
+            fasterButton.addEventListener("click", () => {
+                intervalMs = Math.max(intervalMs / 1.25, 250);
+                if (timer) startPlayback();
+            });
+        };
+
+        setupTimeline({
+            frames: stage2Frames,
+            leftImageId: "stage2-full-frame",
+            rightImageId: "stage2-stop50-frame",
+            leftPrefix: "figs/stage2_training/irepa_full",
+            rightPrefix: "figs/stage2_training/irepa_stop50",
+            scrubberId: "stage2-scrubber",
+            labelId: "stage2-step-label",
+            playId: "stage2-play",
+            slowerId: "stage2-slower",
+            fasterId: "stage2-faster"
+        });
+
+        setupTimeline({
+            frames: stage3Frames,
+            leftImageId: "stage3-fixed-frame",
+            rightImageId: "stage3-cosine-frame",
+            leftPrefix: "figs/stage3_training/fixed",
+            rightPrefix: "figs/stage3_training/cosine",
+            scrubberId: "stage3-scrubber",
+            labelId: "stage3-step-label",
+            playId: "stage3-play",
+            slowerId: "stage3-slower",
+            fasterId: "stage3-faster"
+        });
+
+        (() => {
+            const frames = stage3Frames;
+            const img = document.getElementById("fft-timeline-frame");
+            const scrubber = document.getElementById("fft-scrubber");
+            const stepLabel = document.getElementById("fft-step-label");
+            const playButton = document.getElementById("fft-play");
+            const slowerButton = document.getElementById("fft-slower");
+            const fasterButton = document.getElementById("fft-faster");
+
+            if (!img || !scrubber || !stepLabel || !playButton || !slowerButton || !fasterButton) {
+                return;
+            }
+
+            let timer = null;
+            let intervalMs = 900;
+
+            const updateFrame = (index) => {
+                const frame = frames[index];
+                img.src = `figs/fft/fft_step_${frame.file.replace("fixed_seed_grid_step_", "")}`;
+                stepLabel.textContent = `Checkpoint: ${frame.label}`;
+                scrubber.value = index;
+            };
+
+            const stopPlayback = () => {
+                if (timer) {
+                    window.clearInterval(timer);
+                    timer = null;
+                    playButton.innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+            };
+
+            const startPlayback = () => {
+                stopPlayback();
+                playButton.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                timer = window.setInterval(() => updateFrame((Number(scrubber.value) + 1) % frames.length), intervalMs);
+            };
+
+            scrubber.max = String(frames.length - 1);
+            updateFrame(0);
+            scrubber.addEventListener("input", (event) => updateFrame(Number(event.target.value)));
+            playButton.addEventListener("click", () => (timer ? stopPlayback() : startPlayback()));
+            slowerButton.addEventListener("click", () => {
+                intervalMs = Math.min(intervalMs * 1.25, 4000);
+                if (timer) startPlayback();
+            });
+            fasterButton.addEventListener("click", () => {
+                intervalMs = Math.max(intervalMs / 1.25, 250);
+                if (timer) startPlayback();
+            });
+        })();
+    </script>
+</body>
+</html>

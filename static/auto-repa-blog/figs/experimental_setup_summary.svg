@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="640" viewBox="0 0 860 640" role="img" aria-labelledby="title desc">
+  <title id="title">Experimental setup summary</title>
+  <desc id="desc">Summary table of backbone, metrics, models, and stage focus for the Inspect-REPA project.</desc>
+  <style>
+    .title { font: 700 17px Arial, Helvetica, sans-serif; fill: #43566f; }
+    .label { font: 700 15px Arial, Helvetica, sans-serif; fill: #29384a; }
+    .body { font: 400 15px Arial, Helvetica, sans-serif; fill: #29384a; }
+    .small { font: 400 14px Arial, Helvetica, sans-serif; fill: #29384a; }
+  </style>
+  <rect width="860" height="640" fill="#ffffff"/>
+  <text x="92" y="36" class="title">Category</text>
+  <text x="481" y="36" class="title">Setting / Detail</text>
+
+  <rect x="25" y="43" width="810" height="43" fill="#ebebeb"/>
+  <text x="34" y="69" class="label">Backbone &amp; data</text>
+  <text x="247" y="69" class="body">SiT-B/2 · ImageNet-100 · 256px latent diffusion</text>
+
+  <text x="34" y="115" class="label">Eval cadence</text>
+  <text x="247" y="115" class="body">Stages 1 &amp; 2: checkpoints at 10k, 30k, 50k, 70k, 100k · Stage 3: every 50k</text>
+  <text x="247" y="138" class="body">up to 250k</text>
+
+  <rect x="25" y="153" width="810" height="43" fill="#ebebeb"/>
+  <text x="34" y="180" class="label">Generative metrics</text>
+  <text x="247" y="180" class="body">FID ↓ · Inception Score ↑ · KID ↓  (256px ImageNet-100 reference)</text>
+
+  <text x="34" y="226" class="label">Optimization</text>
+  <text x="34" y="248" class="label">diagnostics</text>
+  <text x="247" y="226" class="body">Denoising loss · gradient norm · projection loss · feature cosine</text>
+
+  <rect x="25" y="263" width="810" height="58" fill="#ebebeb"/>
+  <text x="34" y="291" class="label">Trajectory analyses</text>
+  <text x="247" y="291" class="body">Synchronized sample timelines · Pareto IS vs log(1/FID) views · residual</text>
+  <text x="247" y="314" class="body">&amp; FFT maps</text>
+
+  <text x="34" y="358" class="label">Vanilla</text>
+  <text x="247" y="358" class="body">No representation alignment</text>
+
+  <rect x="25" y="373" width="810" height="43" fill="#ebebeb"/>
+  <text x="34" y="399" class="label">REPA (L8)</text>
+  <text x="247" y="399" class="body">DINOv2-B teacher · MLP projection · alignment coeff 0.5</text>
+
+  <text x="34" y="445" class="label">iREPA (L8)</text>
+  <text x="247" y="445" class="body">DINOv2-B teacher · conv projection · z-score spatial norm · alignment</text>
+  <text x="247" y="468" class="body">coeff 1.0</text>
+
+  <rect x="25" y="483" width="810" height="43" fill="#ebebeb"/>
+  <text x="34" y="509" class="label">Stage 1 focus</text>
+  <text x="247" y="509" class="body">Baseline confirmation + layer ablation (L4 / L6 / L8 / L10)</text>
+
+  <text x="34" y="555" class="label">Stage 2 focus</text>
+  <text x="247" y="555" class="body">Hard early-stop schedules: stop-10 / stop-50 / stop-75 / full</text>
+
+  <rect x="25" y="570" width="810" height="43" fill="#ebebeb"/>
+  <text x="34" y="596" class="label">Stage 3 focus</text>
+  <text x="247" y="596" class="body">Cosine annealing vs always-on iREPA over 250k steps</text>
+</svg>
